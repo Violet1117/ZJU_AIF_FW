@@ -32,7 +32,7 @@ class VggFeatures(nn.Module):
         self.bn4a = nn.BatchNorm2d(512)
         self.bn4b = nn.BatchNorm2d(512)
 
-        self.lin1 = nn.Linear(512 * 2 * 2, 4096)
+        self.lin1 = nn.Linear(512 * 3 * 3, 4096)
         self.lin2 = nn.Linear(4096, 4096)
 
         self.drop = nn.Dropout(p=drop)
@@ -41,23 +41,28 @@ class VggFeatures(nn.Module):
         x = F.relu(self.bn1a(self.conv1a(x)))
         x = F.relu(self.bn1b(self.conv1b(x)))
         x = self.pool(x)
+        # print(x.shape)
 
         x = F.relu(self.bn2a(self.conv2a(x)))
         x = F.relu(self.bn2b(self.conv2b(x)))
         x = self.pool(x)
+        # print(x.shape)
 
         x = F.relu(self.bn3a(self.conv3a(x)))
         x = F.relu(self.bn3b(self.conv3b(x)))
         x = self.pool(x)
+        # print(x.shape)
 
         x = F.relu(self.bn4a(self.conv4a(x)))
         x = F.relu(self.bn4b(self.conv4b(x)))
         x = self.pool(x)
         # print(x.shape)
 
-        x = x.view(-1, 512 * 2 * 2)
+        x = x.view(-1, 512 * 3 * 3)
         x = F.relu(self.drop(self.lin1(x)))
+        # print(x.shape)
         x = F.relu(self.drop(self.lin2(x)))
+        # print(x.shape)
 
         return x
 
