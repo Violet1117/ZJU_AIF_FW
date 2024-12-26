@@ -18,11 +18,13 @@ def EvalModel_page():
     elif model_name == "AlexNet":
         model = AlexNet()
         model.load_state_dict(torch.load('results/AlexNet.pth'))
+        _,_,test_loader = data_pre_AlexNet()
     elif model_name == "MLP":
         model = MLP()
         model.load_state_dict(torch.load('results/MLP.pth'))
     elif model_name == "VGG":
         model = Vgg()
+        model.load_state_dict(torch.load('results/VGG.pth'))
     detals_model = show_model_details(model)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)

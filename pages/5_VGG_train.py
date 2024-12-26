@@ -37,3 +37,5 @@ def VGG_page():
         st.write(f"Test F1 Score: {f1:.4f}")
         # 绘制 ROC 曲线
         plot_roc_curve(labels, probs, num_classes=7)
+
+VGG_page()

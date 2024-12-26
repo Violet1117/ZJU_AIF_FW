@@ -90,7 +90,7 @@ def data_pre():
         transforms.RandomHorizontalFlip(),
         transforms.RandomRotation(5),
         transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        transforms.Normalize(mean=[0.5], std=[0.5])
     ])
     BATCH_SIZE = 64
     train_data, val_data, test_data = load_data()
