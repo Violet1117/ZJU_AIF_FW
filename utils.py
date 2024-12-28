@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import inspect
 import textwrap
 import torch
+import subprocess
+import os
 import torchvision.transforms as transforms
 from torch.utils.data import Dataset, DataLoader
 from model.dataset_FER2013 import FER2013
@@ -70,9 +72,24 @@ def show_train_details(device, loss_function, optimizer):
 load_data: Load the data.
 for streamlit, we need to use st.cache_data to cache the data.
 '''
+
+def down_load_data():
+    # download dataset
+    subprocess.run(["kaggle", "datasets", "download", "deadskull7/fer2013"])
+
+    # unzip the dataset
+    zip_file_path = 'fer2013.zip'
+    dataset_dir = 'dataset'
+    if os.path.exists(zip_file_path):
+        subprocess.run(["unzip", zip_file_path, "-d", dataset_dir])
+        # remove the zip file
+        os.remove(zip_file_path)
+
 @st.cache_data
 def load_data():
     LOGGER.info('Loading data...')
+    if not os.path.exists('dataset/fer2013.csv'):
+        down_load_data()
     Fer2013_data = pd.read_csv('dataset/fer2013.csv')
     train_data = Fer2013_data[Fer2013_data['Usage'] == 'Training']
     val_data = Fer2013_data[Fer2013_data['Usage'] == 'PrivateTest']
