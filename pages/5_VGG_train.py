@@ -31,11 +31,7 @@ def VGG_page():
         save_result(result, 'results/VGG')
         st.success("Training completed.")
         acc, prec, rec, f1, labels, probs = evaluate(model, test_loader, device)
-        st.write(f"Test Accuracy: {acc:.4f}")
-        st.write(f"Test Precision: {prec:.4f}")
-        st.write(f"Test Recall: {rec:.4f}")
-        st.write(f"Test F1 Score: {f1:.4f}")
-        # 绘制 ROC 曲线
-        plot_roc_curve(labels, probs, num_classes=7)
+
+        save_result_eval(acc, prec, rec, f1, labels, probs, 'results/VGG_eval.csv')
 
 VGG_page()

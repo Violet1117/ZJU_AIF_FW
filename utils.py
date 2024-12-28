@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import csv
 import matplotlib.pyplot as plt
 import inspect
 import textwrap
@@ -123,6 +124,20 @@ def data_pre_AlexNet():
 def save_result(result, name):
     pd.DataFrame(result).to_csv(name+'.csv', index=False)
 
+def save_result_eval(acc,prec,rec,f1,labels,probs, name):
+    with open(name, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Accuracy', 'Precision', 'Recall', 'F1 Score', 'Labels', 'Probabilities'])
+        writer.writerow([acc, prec, rec, f1, labels, probs])
+
+def read_result(name):
+    with open(name, mode='r') as file:
+        reader = csv.reader(file)
+        header = next(reader)
+        result = next(reader)
+
+    return result
+
 def plot_roc_curve(labels, probs, num_classes):
     fpr = {}
     tpr = {}
@@ -232,5 +247,12 @@ def evaluate(model, test_loader, device):
     prec = precision_score(all_labels, all_preds, average='macro')
     rec = recall_score(all_labels, all_preds, average='macro')
     f1 = f1_score(all_labels, all_preds, average='macro')
+
+    st.write(f"Test Accuracy: {acc:.4f}")
+    st.write(f"Test Precision: {prec:.4f}")
+    st.write(f"Test Recall: {rec:.4f}")
+    st.write(f"Test F1 Score: {f1:.4f}")
+
+    plot_roc_curve(all_labels, all_probs, num_classes=7)
 
     return acc, prec, rec, f1, all_labels, all_probs
