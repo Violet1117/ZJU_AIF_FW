@@ -8,6 +8,7 @@ import textwrap
 import torch
 import subprocess
 import os
+import zipfile
 import torchvision.transforms as transforms
 from torch.utils.data import Dataset, DataLoader
 from model.dataset_FER2013 import FER2013
@@ -81,9 +82,8 @@ def down_load_data():
     zip_file_path = 'fer2013.zip'
     dataset_dir = 'dataset'
     if os.path.exists(zip_file_path):
-        subprocess.run(["unzip", zip_file_path, "-d", dataset_dir])
-        # remove the zip file
-        os.remove(zip_file_path)
+        with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+            zip_ref.extractall(dataset_dir)
 
 @st.cache_data
 def load_data():
